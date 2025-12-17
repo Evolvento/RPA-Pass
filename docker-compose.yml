@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  rpa-passbot:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - ./templates:/app/templates
+      - ./output:/app/output
+      - ./logs:/app/logs
+    # Запуск однократно для демонстрации:
+    # command: python main.py
+    # Или в бесконечном цикле с паузой (для реального использования):
+    command: >
+      sh -c "
+      while true; do
+        python main.py;
+        echo '[$$(date)] Ожидание 60 секунд до следующего цикла...';
+        sleep 60;
+      done
+      "
+    restart: unless-stopped
