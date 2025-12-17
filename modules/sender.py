@@ -4,6 +4,8 @@ import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
+from email.utils import formatdate
+from email.header import Header
 from email import encoders
 from typing import Optional
 
@@ -61,9 +63,10 @@ class EmailSender:
                 part.set_payload(attachment.read())
             encoders.encode_base64(part)
             filename = os.path.basename(docx_path)
+            encoded_filename = Header(filename, "utf-8").encode()
             part.add_header(
                 "Content-Disposition",
-                f"attachment; filename={filename}"
+                f"attachment; filename={encoded_filename}"
             )
             msg.attach(part)
 
